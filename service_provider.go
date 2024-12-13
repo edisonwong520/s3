@@ -22,7 +22,7 @@ func (receiver *ServiceProvider) Register(app foundation.Application) {
 }
 
 func (receiver *ServiceProvider) Boot(app foundation.Application) {
-	app.Publishes("github.com/goravel/s3", map[string]string{
+	app.Publishes("github.com/edisonwong520/s3", map[string]string{
 		"config/s3.go": app.ConfigPath(""),
 	})
 }
