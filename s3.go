@@ -42,13 +42,15 @@ func NewS3(ctx context.Context, config config.Config, disk string) (*S3, error) 
 	region := config.GetString(fmt.Sprintf("filesystems.disks.%s.region", disk))
 	bucket := config.GetString(fmt.Sprintf("filesystems.disks.%s.bucket", disk))
 	url := config.GetString(fmt.Sprintf("filesystems.disks.%s.url", disk))
-	if accessKeyId == "" || accessKeySecret == "" || region == "" || bucket == "" || url == "" {
+	endpoint := config.GetString(fmt.Sprintf("filesystems.disks.%s.endpoint", disk))
+	if accessKeyId == "" || accessKeySecret == "" || region == "" || bucket == "" || url == "" || endpoint == "" {
 		return nil, fmt.Errorf("please set %s configuration first", disk)
 	}
 
 	client := s3.New(s3.Options{
-		Region:      region,
-		Credentials: aws.NewCredentialsCache(credentials.NewStaticCredentialsProvider(accessKeyId, accessKeySecret, "")),
+		Region:       region,
+		Credentials:  aws.NewCredentialsCache(credentials.NewStaticCredentialsProvider(accessKeyId, accessKeySecret, "")),
+		BaseEndpoint: aws.String(endpoint),
 	})
 
 	return &S3{
